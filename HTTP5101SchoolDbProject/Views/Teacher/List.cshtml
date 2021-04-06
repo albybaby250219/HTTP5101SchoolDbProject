@@ -1,0 +1,16 @@
+﻿@model IEnumerable<HTTP5101SchoolDbProject.Models.Teacher>
+    @{
+        ViewBag.Title = "List";
+    }
+    <div id="teacherdetails">
+        <h2>Teachers</h2>
+        <p>The List of teachers:</p>
+        @foreach (var teacher in Model)
+        {
+            <div class="listitem row">
+                <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname </a></div>
+            </div>
+        }
+
+    </div>
+
