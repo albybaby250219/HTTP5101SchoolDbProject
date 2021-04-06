@@ -13,5 +13,7 @@ namespace HTTP5101SchoolDbProject.Models
         public DateTime TeacherHiredDate;
         public string TeacherEmployeeNumber;
         public decimal TeacherSalary;
+        public string ClassCode;
+        public string ClassName;
     }
 }

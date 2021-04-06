@@ -20,13 +20,15 @@ namespace HTTP5101SchoolDbProject.Controllers
         /// <summary>
         /// Returns a list of Teachers from the database
         /// </summary>
-        /// <example>GET api/TeacherData/ListTeachers</example>
+        /// <example>GET api/TeacherData/ListTeachers/{searchname}</example>
         /// <returns>
         /// A list of Teachers (first names , last names,salary,Hireddate)
         /// </returns>
         [HttpGet]
-        public IEnumerable<Teacher> ListTeachers()
+        [Route("api/teacherdata/listteachers/{searchname}")]
+        public IEnumerable<Teacher> ListTeachers(string SearchName)
         {
+            Debug.WriteLine(SearchName);
             ///Connecting to the mysql database 
             ///create an instance of the connection
             MySqlConnection connection = SchoolDb.AcessDatabase();
@@ -35,7 +37,9 @@ namespace HTTP5101SchoolDbProject.Controllers
             ///Creating a command to query the database
             MySqlCommand command = connection.CreateCommand();
             ///the sql query
-            command.CommandText = "select * from teachers";
+            command.CommandText = "select * from teachers where teacherfname like @searchname or teacherlname like @searchname";
+            command.Parameters.AddWithValue("@searchname", "%" + SearchName + "%");
+            command.Prepare();
             ///Take the data from the database into an array
             MySqlDataReader ResultSet = command.ExecuteReader();
             ///Creating an empty list of teachers
@@ -91,7 +95,7 @@ namespace HTTP5101SchoolDbProject.Controllers
             MySqlCommand command = Connection.CreateCommand();
 
             //SQL QUERY
-            command.CommandText = "Select * from teachers where teacherid = " + id;
+            command.CommandText = "Select * from teachers  join classes on teachers.teacherid = classes.teacherid where classes.teacherid = " + id;
 
             //Gather Result Set of Query into a variable
             MySqlDataReader ResultSet = command.ExecuteReader();
@@ -105,6 +109,8 @@ namespace HTTP5101SchoolDbProject.Controllers
                 string TeacherEmployeeNumber = ResultSet["employeenumber"].ToString();
                 DateTime TeacherHiredDate = (DateTime)ResultSet["hiredate"];
                 decimal TeacherSalary = (decimal)ResultSet["salary"];
+                string ClassCode = ResultSet["classcode"].ToString();
+                string ClassName = ResultSet["classname"].ToString();
 
                 NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFname = TeacherFname;
@@ -112,9 +118,11 @@ namespace HTTP5101SchoolDbProject.Controllers
                 NewTeacher.TeacherEmployeeNumber = TeacherEmployeeNumber;
                 NewTeacher.TeacherHiredDate = TeacherHiredDate;
                 NewTeacher.TeacherSalary = TeacherSalary;
+                NewTeacher.ClassCode = ClassCode;
+                NewTeacher.ClassName = ClassName;
             }
             Connection.Close();
-            Console.WriteLine(NewTeacher);
+            Debug.WriteLine(NewTeacher);
             return NewTeacher;
         }
 

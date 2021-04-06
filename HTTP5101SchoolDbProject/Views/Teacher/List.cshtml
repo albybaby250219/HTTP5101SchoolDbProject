@@ -2,15 +2,31 @@
     @{
         ViewBag.Title = "List";
     }
-    <div id="teacherdetails">
-        <h2>Teachers</h2>
-        <p>The List of teachers:</p>
-        @foreach (var teacher in Model)
-        {
-            <div class="listitem row">
-                <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname </a></div>
-            </div>
-        }
+<div id="teacherdetails">
+    <h2>Teachers</h2>
+    <p>The List of teachers:</p>
+    <form action="/Teacher/List" method="get">
+        <label for="SearchName">Give the Name!!</label>
+        <input type="text" name="SearchName" />
+        <input type="submit" value="Search by Teacher Name" />
+    </form>
+    <!--<form action="/Teacher/List" method="get">
+        <label for="SearchDate">Give the HiredDate!!</label>
+        <input type="text" name="SearchDate" />
+        <input type="submit" value="Search by HiredDate" />
+    </form>
+    <form action="/Teacher/List" method="get">
+        <label for="SearchSalary">Give the Salary!!</label>
+        <input type="text" name="SearchSalary" />
+        <input type="submit" value="Search by Salary" />
+    </form>-->
+    <span style="font-style:italic;">@Model.Count() Result(s)found</span>
+    @foreach (var teacher in Model)
+    {
+        <div class="listitem row">
+            <div class="col-md-12"><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname </a></div>
+        </div>
+    }
 
-    </div>
+</div>
 
